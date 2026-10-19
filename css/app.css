@@ -1,0 +1,248 @@
+:root {
+  --fondo: #f4f1ec;
+  --panel: #ffffff;
+  --texto: #2a2622;
+  --suave: #7a7168;
+  --borde: #ddd5ca;
+  --acento: #8a5a2b;
+  --acento-texto: #ffffff;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.barra {
+  padding: 16px 24px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--borde);
+}
+
+.barra h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: minmax(320px, 460px) 1fr;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.panel,
+.vista {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+
+.vista {
+  align-self: start;
+  position: sticky;
+  top: 16px;
+}
+
+.vista h2 {
+  margin: 0 0 12px;
+  font-size: 16px;
+}
+
+.paso {
+  border: 0;
+  padding: 0;
+  margin: 0 0 24px;
+  min-width: 0;
+}
+
+.paso:disabled {
+  opacity: 0.45;
+}
+
+.paso legend {
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.num {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--acento);
+  color: var(--acento-texto);
+  font-size: 13px;
+}
+
+.opciones {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tarjeta {
+  position: relative;
+  cursor: pointer;
+}
+
+.tarjeta input {
+  position: absolute;
+  opacity: 0;
+}
+
+.tarjeta span {
+  display: block;
+  padding: 12px 18px;
+  border: 1.5px solid var(--borde);
+  border-radius: 10px;
+  font-weight: 500;
+  min-width: 150px;
+  text-align: center;
+}
+
+.tarjeta.pequena span {
+  min-width: 64px;
+  font-size: 18px;
+}
+
+.tarjeta input:checked + span {
+  border-color: var(--acento);
+  background: #f6ece1;
+  color: var(--acento);
+}
+
+.tarjeta input:focus-visible + span {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+.comunes,
+.bloque-menu {
+  display: grid;
+  gap: 10px;
+}
+
+.comunes {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--borde);
+}
+
+.bloque-menu {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+.bloque-menu h3 {
+  margin: 0;
+  font-size: 15px;
+  color: var(--acento);
+}
+
+label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--suave);
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--texto);
+  background: #fff;
+}
+
+input[type="text"]:focus {
+  outline: 2px solid var(--acento);
+  outline-offset: -1px;
+  border-color: transparent;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1.5px solid var(--acento);
+  background: var(--acento);
+  color: var(--acento-texto);
+  cursor: pointer;
+}
+
+button.secundario {
+  background: transparent;
+  color: var(--acento);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.vista-marco {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  background: #fff;
+}
+
+.vista-marco .hoja {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.vista-marco.vacia {
+  display: none;
+}
+
+.nota {
+  color: var(--suave);
+  font-size: 14px;
+}
+
+#zona-captura {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+}
+
+@media (max-width: 860px) {
+  .contenido {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .vista {
+    order: -1;
+    position: static;
+  }
+}
