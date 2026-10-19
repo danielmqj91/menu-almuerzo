@@ -13,7 +13,8 @@ Página web sencilla para generar en PDF el menú de almuerzo de las panaderías
    - **Sopa**, **Jugo** y **Precio**: son los mismos para todas las opciones.
    - Por cada menú: **Proteína**, **Acompañamiento 1**, **Acompañamiento 2** y **Ensalada**
      (los campos vacíos no se imprimen).
-5. Revisa la vista previa y pulsa **Descargar PDF**.
+5. Revisa la vista previa y pulsa **Descargar PDF**, o **Compartir** en el celular
+   (envía el archivo PDF directamente, por ejemplo a WhatsApp, sin enlaces).
 
 El tamaño de la letra se ajusta solo para que todo quepa en la hoja.
 

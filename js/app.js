@@ -21,6 +21,7 @@
   var notaVista = document.getElementById('nota-vista');
   var btnPdf = document.getElementById('btn-pdf');
   var btnLimpiar = document.getElementById('btn-limpiar');
+  var btnCompartir = document.getElementById('btn-compartir');
 
   // Valores escritos por opción; se conservan al cambiar el número de opciones.
   var valoresMenus = [];
@@ -188,9 +189,12 @@
     return 'menu_' + PANADERIAS[datos.panaderia].archivo + '_' + fecha + '.pdf';
   }
 
-  function descargarPdf() {
-    var datos = datosActuales();
-    if (!datos.panaderia || !datos.opciones) return;
+  // Último PDF generado; se reutiliza mientras el menú no cambie.
+  var pdfListo = null;
+
+  function generarPdf(datos) {
+    var clave = JSON.stringify(datos);
+    if (pdfListo && pdfListo.clave === clave) return Promise.resolve(pdfListo.archivo);
 
     var zona = document.createElement('div');
     zona.id = 'zona-captura';
@@ -199,27 +203,93 @@
     document.body.appendChild(zona);
     renderizar(copiaHoja, datos);
 
-    btnPdf.disabled = true;
-    btnPdf.textContent = 'Generando…';
-
-    document.fonts.ready
+    return document.fonts.ready
       .then(function () {
         return html2canvas(copiaHoja, { scale: 3, backgroundColor: '#ffffff', logging: false });
       })
       .then(function (canvas) {
         var pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'pt', format: [720, 540] });
         pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 720, 540);
-        pdf.save(nombreArchivo(datos));
+        var archivo = new File([pdf.output('blob')], nombreArchivo(datos), { type: 'application/pdf' });
+        pdfListo = { clave: clave, archivo: archivo };
+        return archivo;
       })
+      .finally(function () {
+        zona.remove();
+      });
+  }
+
+  function puedeCompartir(archivo) {
+    return !!(navigator.canShare && navigator.canShare({ files: [archivo] }));
+  }
+
+  // Comparte el archivo PDF en sí (sin enlaces ni texto adicional).
+  function compartirArchivo(archivo) {
+    return navigator.share({ files: [archivo] });
+  }
+
+  function descargarArchivo(archivo) {
+    var url = URL.createObjectURL(archivo);
+    var enlace = document.createElement('a');
+    enlace.href = url;
+    enlace.download = archivo.name;
+    document.body.appendChild(enlace);
+    enlace.click();
+    enlace.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+  }
+
+  function conBoton(boton, texto, tarea) {
+    var datos = datosActuales();
+    if (!datos.panaderia || !datos.opciones) return;
+    var original = boton.textContent;
+    boton.disabled = true;
+    boton.textContent = texto;
+    generarPdf(datos)
+      .then(tarea)
       .catch(function (err) {
+        if (err && err.name === 'AbortError') return;
         console.error(err);
         alert('No se pudo generar el PDF: ' + err.message);
       })
-      .then(function () {
-        zona.remove();
-        btnPdf.disabled = false;
-        btnPdf.textContent = 'Descargar PDF';
+      .finally(function () {
+        boton.disabled = false;
+        boton.textContent = original;
       });
+  }
+
+  function descargarPdf() {
+    conBoton(btnPdf, 'Generando…', descargarArchivo);
+  }
+
+  function compartirPdf() {
+    var datos = datosActuales();
+    if (!datos.panaderia || !datos.opciones) return;
+
+    // Si el PDF ya está listo se comparte de inmediato, dentro del mismo toque.
+    if (pdfListo && pdfListo.clave === JSON.stringify(datos)) {
+      compartirArchivo(pdfListo.archivo).catch(function (err) {
+        if (err.name !== 'AbortError') descargarArchivo(pdfListo.archivo);
+      });
+      btnCompartir.textContent = 'Compartir';
+      return;
+    }
+
+    conBoton(btnCompartir, 'Generando…', function (archivo) {
+      if (!puedeCompartir(archivo)) {
+        descargarArchivo(archivo);
+        return;
+      }
+      return compartirArchivo(archivo).catch(function (err) {
+        // Algunos navegadores (Safari) no dejan compartir si generar el PDF
+        // tardó mucho; queda listo y basta con tocar otra vez.
+        if (err.name === 'NotAllowedError') {
+          setTimeout(function () { btnCompartir.textContent = 'Toca para compartir'; });
+          return;
+        }
+        throw err;
+      });
+    });
   }
 
   form.addEventListener('change', function (e) {
@@ -239,6 +309,10 @@
     e.preventDefault();
     descargarPdf();
   });
+
+  btnCompartir.addEventListener('click', compartirPdf);
+  // Solo se muestra en navegadores que pueden compartir archivos (celulares, sobre todo).
+  btnCompartir.hidden = !puedeCompartir(new File([''], 'menu.pdf', { type: 'application/pdf' }));
 
   btnLimpiar.addEventListener('click', function () {
     ['sopa', 'jugo', 'precio'].forEach(function (n) { form.elements[n].value = ''; });
