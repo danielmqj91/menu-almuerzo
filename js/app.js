@@ -1,18 +1,12 @@
 (function () {
   'use strict';
 
-  var PANADERIAS = {
-    'santo-domingo': { nombre: 'Santo Domingo', archivo: 'santo_domingo' },
-    'vilanova': { nombre: 'Vilanova', archivo: 'vilanova' }
-  };
-
   // Tamaño máximo de letra del cuerpo según el número de opciones;
   // si el contenido no cabe, se reduce automáticamente.
   var LETRA_MAXIMA = { 2: 24, 3: 21, 4: 19 };
   var LETRA_MINIMA = 10;
 
   var form = document.getElementById('formulario');
-  var pasoOpciones = document.getElementById('paso-opciones');
   var pasoMenu = document.getElementById('paso-menu');
   var listaMenus = document.getElementById('lista-menus');
   var tplMenu = document.getElementById('tpl-menu');
@@ -82,11 +76,11 @@
   }
 
   function crearCopia(datos) {
-    var copia = el('div', 'copia tema-' + datos.panaderia);
+    var copia = el('div', 'copia');
 
     var encabezado = el('div', 'encabezado');
     encabezado.appendChild(el('div', 'pre', 'Panadería'));
-    encabezado.appendChild(el('div', 'nombre', PANADERIAS[datos.panaderia].nombre));
+    encabezado.appendChild(el('div', 'nombre', 'Vilanova'));
     encabezado.appendChild(el('div', 'sub', 'MENÚ DEL DÍA'));
     copia.appendChild(encabezado);
 
@@ -94,7 +88,6 @@
     var entrada = el('div', 'entrada');
     entrada.appendChild(el('span', 'etq', 'ENTRADA:'));
     entrada.appendChild(el('span', 'sopa', datos.sopa));
-    entrada.appendChild(el('span', 'icono'));
     cuerpo.appendChild(entrada);
 
     datos.menus.forEach(function (items, i) {
@@ -116,16 +109,10 @@
     var bebida = el('div', 'caja bebida');
     bebida.appendChild(el('span', 'etq', 'Bebida:'));
     bebida.appendChild(el('div', 'texto', datos.jugo));
-    bebida.appendChild(el('span', 'icono'));
     if (!datos.jugo) bebida.classList.add('oculta');
 
-    if (datos.panaderia === 'vilanova') {
-      pie.appendChild(precio);
-      pie.appendChild(bebida);
-    } else {
-      pie.appendChild(bebida);
-      pie.appendChild(precio);
-    }
+    pie.appendChild(precio);
+    pie.appendChild(bebida);
     copia.appendChild(pie);
     copia.appendChild(el('div', 'gracias', 'GRACIAS POR PREFERIRNOS!!'));
     return copia;
@@ -149,7 +136,6 @@
 
   function datosActuales() {
     return {
-      panaderia: valor('panaderia'),
       opciones: Number(valor('opciones')),
       sopa: valor('sopa'),
       jugo: valor('jugo'),
@@ -173,7 +159,7 @@
 
   function actualizarVista() {
     var datos = datosActuales();
-    var lista = datos.panaderia && datos.opciones;
+    var lista = !!datos.opciones;
     marco.classList.toggle('vacia', !lista);
     notaVista.hidden = !!lista;
     if (!lista) return;
@@ -186,7 +172,7 @@
     var fecha = hoy.getFullYear() + '-' +
       String(hoy.getMonth() + 1).padStart(2, '0') + '-' +
       String(hoy.getDate()).padStart(2, '0');
-    return 'menu_' + PANADERIAS[datos.panaderia].archivo + '_' + fecha + '.pdf';
+    return 'menu_vilanova_' + fecha + '.pdf';
   }
 
   // Último PDF generado; se reutiliza mientras el menú no cambie.
@@ -241,7 +227,7 @@
 
   function conBoton(boton, texto, tarea) {
     var datos = datosActuales();
-    if (!datos.panaderia || !datos.opciones) return;
+    if (!datos.opciones) return;
     var original = boton.textContent;
     boton.disabled = true;
     boton.textContent = texto;
@@ -264,7 +250,7 @@
 
   function compartirPdf() {
     var datos = datosActuales();
-    if (!datos.panaderia || !datos.opciones) return;
+    if (!datos.opciones) return;
 
     // Si el PDF ya está listo se comparte de inmediato, dentro del mismo toque.
     if (pdfListo && pdfListo.clave === JSON.stringify(datos)) {
@@ -293,9 +279,6 @@
   }
 
   form.addEventListener('change', function (e) {
-    if (e.target.name === 'panaderia') {
-      pasoOpciones.disabled = false;
-    }
     if (e.target.name === 'opciones') {
       pasoMenu.disabled = false;
       crearBloquesMenu(Number(e.target.value));

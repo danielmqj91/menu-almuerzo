@@ -1,19 +1,18 @@
 # Menú del Día
 
-Página web sencilla para generar en PDF el menú de almuerzo de las panaderías
-**Santo Domingo** y **Vilanova**, con el mismo formato de las plantillas de
+Página web sencilla para generar en PDF el menú de almuerzo de la
+**Panadería Vilanova**, con el mismo formato de las plantillas de
 `ejemplos/` (hoja horizontal de 10 × 7.5 in con dos copias del menú).
 
 ## Uso
 
 1. Abre `index.html` en el navegador (doble clic; no requiere servidor ni internet).
-2. Elige la panadería.
-3. Elige cuántas opciones de menú tendrá (2, 3 o 4).
-4. Llena el formulario:
+2. Elige cuántas opciones de menú tendrá (2, 3 o 4).
+3. Llena el formulario:
    - **Sopa**, **Jugo** y **Precio**: son los mismos para todas las opciones.
    - Por cada menú: **Proteína**, **Acompañamiento 1**, **Acompañamiento 2** y **Ensalada**
      (los campos vacíos no se imprimen).
-5. Revisa la vista previa y pulsa **Descargar PDF**, o **Compartir** en el celular
+4. Revisa la vista previa y pulsa **Descargar PDF**, o **Compartir** en el celular
    (envía el archivo PDF directamente, por ejemplo a WhatsApp, sin enlaces).
 
 El tamaño de la letra se ajusta solo para que todo quepa en la hoja.

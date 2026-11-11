@@ -19,8 +19,6 @@ FUENTES = [
 
 IMAGENES = {
     "--img-vilanova-fondo": "vilanova-fondo.jpg",
-    "--img-sopa": "sopa.jpg",
-    "--img-bebida": "bebida.jpg",
 }
 
 

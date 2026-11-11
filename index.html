@@ -3,35 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Menú del Día</title>
+  <title>Menú del Día · Vilanova</title>
   <link rel="stylesheet" href="assets/recursos.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/menu.css">
 </head>
 <body>
   <header class="barra">
-    <h1>Generador de Menú del Día</h1>
+    <h1>Generador de Menú del Día · Panadería Vilanova</h1>
   </header>
 
   <main class="contenido">
     <section class="panel">
       <form id="formulario" autocomplete="off">
         <fieldset class="paso">
-          <legend><span class="num">1</span> Panadería</legend>
-          <div class="opciones">
-            <label class="tarjeta">
-              <input type="radio" name="panaderia" value="santo-domingo" required>
-              <span>Santo Domingo</span>
-            </label>
-            <label class="tarjeta">
-              <input type="radio" name="panaderia" value="vilanova">
-              <span>Vilanova</span>
-            </label>
-          </div>
-        </fieldset>
-
-        <fieldset class="paso" id="paso-opciones" disabled>
-          <legend><span class="num">2</span> Opciones de menú</legend>
+          <legend><span class="num">1</span> Opciones de menú</legend>
           <div class="opciones">
             <label class="tarjeta pequena"><input type="radio" name="opciones" value="2" required><span>2</span></label>
             <label class="tarjeta pequena"><input type="radio" name="opciones" value="3"><span>3</span></label>
@@ -40,11 +26,11 @@
         </fieldset>
 
         <fieldset class="paso" id="paso-menu" disabled>
-          <legend><span class="num">3</span> Menú</legend>
+          <legend><span class="num">2</span> Menú</legend>
 
           <div class="comunes">
             <label>Sopa
-              <input type="text" name="sopa" placeholder="Ej: Sopa de res">
+              <input type="text" name="sopa" placeholder="Ej: Sopa de cuchuco de maíz">
             </label>
             <label>Jugo
               <input type="text" name="jugo" placeholder="Ej: Jugo de mango">
@@ -70,7 +56,7 @@
       <div class="vista-marco" id="vista-marco">
         <div class="hoja" id="hoja"></div>
       </div>
-      <p class="nota" id="nota-vista">Selecciona la panadería y el número de opciones para ver el formato.</p>
+      <p class="nota" id="nota-vista">Selecciona el número de opciones para ver el formato.</p>
     </section>
   </main>
 
